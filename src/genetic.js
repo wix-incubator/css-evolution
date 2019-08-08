@@ -1,7 +1,7 @@
 import {randomInt} from './random'
 
 const population = 50;
-const surivors = 10;
+const surivors = 20;
 
 export function initPool(spawn) {
     const pool = new Array(surivors).fill().map(() => {

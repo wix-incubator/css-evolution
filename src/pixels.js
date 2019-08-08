@@ -41,6 +41,7 @@ export function getImgUrl(offsetWidth, offsetHeight, html, css) {
               width: ${offsetWidth + 40}px;
               height: ${offsetHeight + 40}px;
               position: relative;
+              background: #777;
             }
             ${css}
           </style>
@@ -92,7 +93,7 @@ export function matchImages(imgA, imgB) {
     diff = diff + (Math.abs(bufA[i] - bufB[i])/1024.0);
     diff = diff + (Math.abs(bufA[i+1] - bufB[i+1])/1024.0);
     diff = diff + (Math.abs(bufA[i+2] - bufB[i+2])/1024.0);
-    diff = diff + (Math.abs(bufA[i+3] - bufB[i+3]));
+    diff = diff + (Math.abs(bufA[i+3] - bufB[i+3])/256.0);
   }
 //   diff = bufA.length - diff;
 //   console.log(diff);

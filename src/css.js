@@ -35,6 +35,11 @@ export async function extractCSSConsts(cssElement) {
   return { colors, urls, sizes: Array.from(sizes) };
 }
 
+export const absoluteCoverPosition = {
+  type: 'position',
+  value:`absolute; left:0; top:0; bottom:0; right:0`
+}
+
 export function createGenerateRandomStyle({ sizes, colors, urls, classNames }) {
   // console.log(colors,urls);
   const randomColor = pickRandomFromArray.bind(null, colors);
@@ -44,17 +49,13 @@ export function createGenerateRandomStyle({ sizes, colors, urls, classNames }) {
   const randomVerticalPosition = pickRandomFromArray.bind(null, ['top', 'center', 'bottom']);
   const randomBackgroundSizePart = pickRandomFromArray.bind(null, sizes.concat('auto'));
   const randomBackgroundSize = () => randomBackgroundSizePart() + ' ' + randomBackgroundSizePart();
-  const randomRepeatPart = () => 'no-repeat'; //pickRandomFromArray.bind(null, ['repeat', 'space', 'round', 'no-repeat']);
+  const randomRepeat = pickRandomFromArray.bind(null, ['repeat', 'no-repeat', 'repeat-x', 'repeat-y']);
 
   const randomType = genPickRandom({
-    background: 10,
-    'background-color': 1,
-    'border-radius': 1,
-    position: 1,
-    left: 1,
-    right: 1,
-    top: 1,
-    bottom: 1
+    background: 15,
+    'background-color': 2,
+    'border-radius': 2,
+    position: 5,
   });
   const randomSelector = genPickRandom(
     classNames.reduce(
@@ -79,12 +80,12 @@ export function createGenerateRandomStyle({ sizes, colors, urls, classNames }) {
           return { type, selector, value: randomSize() };
 
       case 'border-radius':
-          return { type, selector, value: [randomSize(),randomSize(),randomSize(),randomSize()].join(' ') };
+          return { type, selector, value: randomSize() };
 
       case 'background-color':
         return { type, selector, value: randomColor() };
       case 'position':
-        return {type, selector, value: 'absolute'}
+        return {type, selector, value: 'absolute; left:${randomSize()}; top:${randomSize()}; bottom:${randomSize()}; right:${randomSize}'}
       case 'background':
         return {
           type,
@@ -97,8 +98,7 @@ export function createGenerateRandomStyle({ sizes, colors, urls, classNames }) {
             randomSize(),
             '/',
             randomBackgroundSize(),
-            randomRepeatPart(),
-            randomRepeatPart()
+            randomRepeat(),
           ].join(' ')
         };
     }

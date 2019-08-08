@@ -1,7 +1,7 @@
 <script>
 	import {onMount} from 'svelte';
 	import {getPixels, matchImages, getImgUrl} from './pixels';
-	import {extractCSSConsts, createGenerateRandomStyle, renderCSS} from './css'
+	import {extractCSSConsts, createGenerateRandomStyle, renderCSS, absoluteCoverPosition} from './css'
 	import {initPool, evolvePool} from './genetic';
 	import {genPickRandom, randomInt} from './random'
 	export let html = '<div></div>';
@@ -16,15 +16,16 @@
 	let genStyle = null;
 	let randomMutationType = genPickRandom({
 		ADD: 10,
-		REMOVE: 1,
-		REPLACE: 1,
+		REMOVE: 2,
+		REPLACE: 5,
 		// CROSS: 1
 	})
 	let display = null
 	let ctx = null;
+	const defaultPrePostPost = [{selector: 'root::before', ...absoluteCoverPosition},{selector: 'root::before', ...absoluteCoverPosition}]
 
-	$: best = `<style>${display && pre + renderCSS(display.genes)}</style>${semantic}`
-	const pre = `
+	$: best = `<style>${display && pre + renderCSS(defaultPrePostPost.concat(display.genes))}</style>${semantic}`
+	const pre = `span[class$="label"] {color:transparent !important;}
 			`
 	let mutateFunc = null;
 	
@@ -35,7 +36,7 @@
 		console.log({ offsetWidth, offsetHeight})
 		canvas.style = `width: ${offsetWidth + 40}px; height: ${offsetHeight + 40}px;`;
 		const cssConsts = await extractCSSConsts(styleNode);
-		const pixels = await getPixels(offsetWidth, offsetHeight, html, style);
+		const pixels = await getPixels(offsetWidth, offsetHeight, html, pre + style);
 		genStyle = createGenerateRandomStyle({...cssConsts, classNames:['root'/*,'link','label'*/]});//,
 		ctx = canvas.getContext('2d');
 		// for (let i = 0; i < pixels.data.length; i+= 4) {
@@ -45,11 +46,11 @@
 		ctx.putImageData(pixels, 0, 0);
 
 		fitnessFunc = async genes => {
-			const newPixels = await getPixels(offsetWidth, offsetHeight, semantic, pre+renderCSS(genes));
+			const newPixels = await getPixels(offsetWidth, offsetHeight, semantic, pre+renderCSS(defaultPrePostPost.concat(genes)));
 			if (render) {
 				ctx.putImageData(newPixels, 0, 0);
 			}
-			return matchImages(newPixels, pixels) + genes.length;
+			return matchImages(newPixels, pixels) + genes.length * genes.length;
 		};
 		mutateFunc = (a, b) => {
 			if (a.length < 2 ) {
@@ -68,7 +69,8 @@
 					return a.slice(0,idx).concat(a.slice(idx + 1))
 			}
 		}
-		pool = initPool(() => [genStyle()]);
+	
+		pool = initPool(() => [ genStyle()]);
 		// pool = initPool(() => [genStyle()]);
 		display = pool.pool[0];
 
