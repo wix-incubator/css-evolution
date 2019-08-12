@@ -20,7 +20,6 @@ export function preLoadDataURL(url) {
     request.send();
   });
 }
-//    <rect x="0" y="0" width="100%" height="100%"/>
 
 export function getImgUrl(offsetWidth, offsetHeight, html, css) {
   css = css.replace(/url\("?([^")]*)"?\)*?\)/g, (matches, url) => `url(${imageURLs[url]})`);
@@ -41,7 +40,6 @@ export function getImgUrl(offsetWidth, offsetHeight, html, css) {
               width: ${offsetWidth + 40}px;
               height: ${offsetHeight + 40}px;
               position: relative;
-              background: #777;
             }
             ${css}
           </style>
@@ -53,22 +51,17 @@ export function getImgUrl(offsetWidth, offsetHeight, html, css) {
         </div>
       </foreignObject>
     </svg>`;
-  // console.log(data);
   const url = 'data:image/svg+xml;base64,' + btoa(data);
   return url;
 }
-// const canvas = document.createElement('canvas');
-// window.document.body.appendChild(canvas)
 
 export function getPixels(offsetWidth, offsetHeight, html, css) {
   return new Promise(resolve => {
-    const canvas = document.createElement('canvas');
-    canvas.style=`width:${offsetWidth + 40}px;height:${offsetHeight + 40}px;`
+    const canvas = new OffscreenCanvas(offsetWidth + 40, offsetHeight + 40);
     const ctx = canvas.getContext('2d');
     const img = new Image();
     const url = getImgUrl(offsetWidth, offsetHeight, html, css);
     window.url = url;
-    // console.log(url);
     img.onload = function() {
       ctx.drawImage(img, 0, 0);
       const DOMURL = window.URL || window.webkitURL || window;
@@ -77,9 +70,16 @@ export function getPixels(offsetWidth, offsetHeight, html, css) {
       resolve(pixels);
     };
     img.src = url;
-    window.document.body.lastChild.NO
-
   });
+}
+
+function diffChannel(valA, alphaA, valB, alphaB) {
+  valA = valA/255.0;
+  valB = valB/255.0;
+  // const dBlack = Math.abs(valA * alphaA - valB * alphaB);
+  // const dWhite = Math.abs(valA * alphaA + (1-alphaA) - valB * alphaB + (1-alphaB))
+  // return dBlack + dWhite;
+  return Math.max(Math.pow(valA-valB,2), Math.pow(valA-valB - alphaA + alphaB,2.0));
 }
 
 export function matchImages(imgA, imgB) {
@@ -90,10 +90,13 @@ export function matchImages(imgA, imgB) {
   }
   let diff = 0;
   for (let i = 0; i < bufA.length; i+=4) {
-    diff = diff + (Math.abs(bufA[i] - bufB[i])/1024.0);
-    diff = diff + (Math.abs(bufA[i+1] - bufB[i+1])/1024.0);
-    diff = diff + (Math.abs(bufA[i+2] - bufB[i+2])/1024.0);
-    diff = diff + (Math.abs(bufA[i+3] - bufB[i+3])/256.0);
+    const a1 = bufA[i+3]/255.0;
+    const a2 = bufB[i+3]/255.0;
+    diff += diffChannel(bufA[i],a1,bufB[i], a2) +  diffChannel(bufA[i+1],a1,bufB[i+1], a2)+  diffChannel(bufA[i+2],a1,bufB[i+2], a2)
+    // diff += bufA[i] === bufB[i+0] ? 0 :1;
+    // diff += bufA[i+1] === bufB[i+1] ? 0 :1;
+    // diff += bufA[i+2] === bufB[i+2] ? 0 :1;
+    // diff += bufA[i+3] === bufB[i+3] ? 0 :1;
   }
 //   diff = bufA.length - diff;
 //   console.log(diff);

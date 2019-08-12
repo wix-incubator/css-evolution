@@ -1,7 +1,8 @@
 <script>
 	import {onMount} from 'svelte';
+	import _ from 'lodash';
 	import {getPixels, matchImages, getImgUrl} from './pixels';
-	import {extractCSSConsts, createGenerateRandomStyle, renderCSS, absoluteCoverPosition} from './css'
+	import {extractCSSConsts, createGenerateRandomStyle, renderCSS, absoluteCoverPosition, pretty} from './css'
 	import {initPool, evolvePool} from './genetic';
 	import {genPickRandom, randomInt} from './random'
 	export let html = '<div></div>';
@@ -15,18 +16,21 @@
 	let fitnessFunc = null;
 	let genStyle = null;
 	let randomMutationType = genPickRandom({
-		ADD: 10,
-		REMOVE: 2,
+		ADD: 15,
+		REMOVE: 25,
 		REPLACE: 5,
+		TWEAK: 10,
+		SHUFFLE: 1,
 		// CROSS: 1
 	})
 	let display = null
 	let ctx = null;
-	const defaultPrePostPost = [{selector: 'root::before', ...absoluteCoverPosition},{selector: 'root::before', ...absoluteCoverPosition}]
+	const defaultPrePostPost = [{selector: 'root::before', ...absoluteCoverPosition},{selector: 'root::after', ...absoluteCoverPosition}]
 
-	$: best = `<style>${display && pre + renderCSS(defaultPrePostPost.concat(display.genes))}</style>${semantic}`
 	const pre = `span[class$="label"] {color:transparent !important;}
 			`
+	$: best = `<style>${pretty(pre + renderCSS(defaultPrePostPost.concat(display ? display.genes: [])), {parser:'css'})}</style>`
+
 	let mutateFunc = null;
 	
 	async function init (){
@@ -50,15 +54,18 @@
 			if (render) {
 				ctx.putImageData(newPixels, 0, 0);
 			}
-			return matchImages(newPixels, pixels) + genes.length * genes.length;
+			return matchImages(newPixels, pixels) + genes.length /1000.0;
 		};
 		mutateFunc = (a, b) => {
+			let type = randomMutationType();
 			if (a.length < 2 ) {
-				return a.concat(genStyle());
+				type = 'ADD';
+			} else if (a.length > 12 && type === 'ADD') {
+				type = 'REMOVE';
 			}
 			const idx = randomInt(a.length);
 
-			switch (randomMutationType()) {
+			switch (type) {
 				case 'REPLACE':
 					return a.slice(0,idx).concat([genStyle()], a.slice(idx + 1))
 				case 'ADD':
@@ -66,7 +73,21 @@
 				// case 'CROSS':
 				// 	return a.concat(b).sort(() => Math.random() - 0.5).slice(0,a.length);
 				case 'REMOVE':
-					return a.slice(0,idx).concat(a.slice(idx + 1))
+					return a.slice(0,idx).concat(a.slice(idx + 1));
+				case 'SHUFFLE':
+					return _.shuffle(a.slice());
+				case 'TWEAK':
+					{
+						const alt = genStyle(a[idx].type, a[idx].selector).value.split(' ');
+						const val = a[idx].value.split(' ');
+						for (let i = 0;i < Math.max(val.length / 4, 1);i++) {
+							const part = randomInt(val.length);
+							val[part] = alt[part];
+						}
+						return a.slice(0,idx).concat([{...a[idx], value: val.join(' ')}], a.slice(idx + 1))
+					}
+					
+
 			}
 		}
 	
@@ -140,5 +161,9 @@
 	</sidebar>
 	<footer>
 		{@html best}
+		<div style="padding:20px">
+			{@html semantic}
+		</div>
+		<pre>{best}</pre>
 	</footer>
 </div>

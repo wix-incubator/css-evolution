@@ -1,6 +1,6 @@
 import { pickRandomFromArray, genPickRandom } from './random';
 import { preLoadDataURL } from './pixels';
-
+import _ from 'lodash';
 const urlRegex = /^url\("(.*)"\)$/;
 
 export async function extractCSSConsts(cssElement) {
@@ -22,7 +22,7 @@ export async function extractCSSConsts(cssElement) {
     .filter(propName => propName.includes('color') || propName.includes('image'))
     .map(propName => Array.from(allValuesPerKey[propName]))
     .flat();
-  const colors = Array.from(new Set(colorsAndImages.filter(v => !urlRegex.test(v))));
+  const colors = Array.from(new Set(colorsAndImages.filter(v => !urlRegex.test(v)))).map(t => t.replace(/ /g,''));
   const urls = Array.from(new Set(colorsAndImages.filter(v => urlRegex.test(v))));
   console.log(allValues);
   console.log({ colors, sizes });
@@ -48,40 +48,42 @@ export function createGenerateRandomStyle({ sizes, colors, urls, classNames }) {
   const randomHorizontalPosition = pickRandomFromArray.bind(null, ['left', 'right', 'center']);
   const randomVerticalPosition = pickRandomFromArray.bind(null, ['top', 'center', 'bottom']);
   const randomBackgroundSizePart = pickRandomFromArray.bind(null, sizes.concat('auto'));
-  const randomBackgroundSize = () => randomBackgroundSizePart() + ' ' + randomBackgroundSizePart();
+  const randomBackgroundSize = () => randomBackgroundSizePart() + ' ' + randomBackgroundSizePart()
   const randomRepeat = pickRandomFromArray.bind(null, ['repeat', 'no-repeat', 'repeat-x', 'repeat-y']);
 
   const randomType = genPickRandom({
-    background: 15,
-    'background-color': 2,
-    'border-radius': 2,
-    position: 5,
+    background: 25,
+    'background-color': 1,
+    'border-radius': 5,
+    'box-shadow': 10,
+    'border': 5,
+    // 'margin': 2,
+    // position: 5,
   });
   const randomSelector = genPickRandom(
     classNames.reduce(
       (acc, v) => ({
         ...acc,
         [v]: 3,
-        [`${v}::before`]: 1,
-        [`${v}::after`]: 1
+        // [`${v}::before`]: 1,
+        // [`${v}::after`]: 1
       }),
       {}
     )
   );
 
-  function generateRandomStyle() {
-    const type = randomType();
-    const selector = randomSelector();
+  function generateRandomStyle(type, selector) {
+    type = type || randomType();
+    // console.log(type);
+    selector = selector || randomSelector();
     switch (type) {
-      case 'left':
-      case 'right':
-      case 'top':
-      case 'bottom':
-          return { type, selector, value: randomSize() };
-
       case 'border-radius':
-          return { type, selector, value: randomSize() };
-
+      case 'margin':
+              return { type, selector, value: [randomSize(), randomSize(), randomSize(), randomSize()].join(' ') };
+      case 'box-shadow':
+          return { type, selector, value: [randomSize(), randomSize(),randomSize(), randomSize(), randomColor()].join(' ') };
+      case 'border':
+          return { type, selector, value: [randomSize(), 'solid', randomColor()].join(' ') };
       case 'background-color':
         return { type, selector, value: randomColor() };
       case 'position':
@@ -107,38 +109,38 @@ export function createGenerateRandomStyle({ sizes, colors, urls, classNames }) {
   return generateRandomStyle;
 }
 
+const supportsMultiples = {
+  'background': true,
+  'box-shadow': true
+}
+
 export function renderCSS(styles) {
   styles = styles || [];
+
   
-  const stylesBySelectors = styles.reduce((acc, style) => {
-    acc[style.selector] = acc[style.selector] || [];
-    acc[style.selector].push(style);
-    return acc;
-  }, {});
-  return Object.keys(stylesBySelectors).reduce((acc, selector) => {
-    const stylesInSelector = stylesBySelectors[selector];
-
-    const joinedStyles = stylesInSelector.reduce((acc, styleRule) => {
-      if (acc[styleRule.type] && styleRule.type === 'background') {
-        acc[styleRule.type] += ',';
-      } else {
-        acc[styleRule.type] = '';
-      }
-      acc[styleRule.type] += styleRule.value;
-      return acc;
-    }, {});
-
-    if (joinedStyles['background-color'] && joinedStyles.background) {
-      joinedStyles.background += ', ' + joinedStyles['background-color'];
-      delete joinedStyles['background-color'];
+  const stylesBySelectors = _.groupBy(styles, 'selector');
+  const stylesTextBySelector = _.map(stylesBySelectors, (rules, selector) => {
+    const stylesByType = _(rules)
+      .groupBy('type')
+      .mapValues((rules, type) => supportsMultiples[type] ? rules : [rules[rules.length-1]])
+      .value();
+    if (stylesByType['background-color']) {
+      stylesByType.background = stylesByType.background || [];
+      stylesByType.background.push(stylesByType['background-color'][0])
+      delete stylesByType['background-color']
     }
-    return (
-      acc +
-      `.${selector} {${Object.keys(joinedStyles).map(
-        type => `
-${type}: ${joinedStyles[type]};`
-      )}
-        }`
-    );
-  }, '');
+    const rulesAsText = _.map(stylesByType, (rules, type) => `
+      ${type}:${_.map(rules,'value').join(',')};`)
+    // console.log(rulesAsText);
+    return `.${selector} {${rulesAsText.join('')}}`
+  })
+  // console.log(stylesTextBySelector.join('\n'))
+  return stylesTextBySelector.join('\n');
+}
+
+const CSS_PART_REGEX = /\s*([{;}])\s*/gm;
+
+export function pretty(css) {
+  return css.replace(CSS_PART_REGEX, (all, char) => (char.length > 1 ? '\n' : '') +` ${char}
+  `);
 }
