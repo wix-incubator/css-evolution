@@ -119,5 +119,5 @@ const style_f = `.style-jxd3g86u button.style-jxd3g86ulink {width:100%;}
 .style-jxd3g86u[data-disabled="true"] .style-jxd3g86ulink,.style-jxd3g86u[data-preview~="disabled"] .style-jxd3g86ulink {background-color:rgba(204, 204, 204, 1);border-color:rgba(204, 204, 204, 1);}
 .style-jxd3g86u[data-disabled="true"] .style-jxd3g86ulabel,.style-jxd3g86u[data-preview~="disabled"] .style-jxd3g86ulabel {color:#FFFFFF;}`
 
-export const html = html_a;
-export const style = style_a;
+export const html = html_c;
+export const style = style_c;

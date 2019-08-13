@@ -1,0 +1,88 @@
+import {genPickRandom, randomInt} from './random'
+import {initPool, evolvePool} from './genetic';
+import {getPixels, matchImages, getImgUrl} from './pixels';
+import {extractCSSConsts, createGenerateRandomStyle, renderCSS, absoluteCoverPosition, pretty} from './css'
+import _ from 'lodash';
+const defaultPrePostPost = [{selector: 'root::before', ...absoluteCoverPosition},{selector: 'root::after', ...absoluteCoverPosition}]
+
+const pre = `span[class$="label"] {color:transparent !important;}
+`
+
+const randomMutationType = genPickRandom({
+    ADD: 15,
+    REMOVE: 25,
+    REPLACE: 5,
+    TWEAK: 10,
+    SHUFFLE: 1,
+    // CROSS: 1
+});
+
+export default class GeneticCSS {
+    constructor(peek) {
+        this.peek = peek || (() => {});
+    }
+    async init(semantic, node, styleNode) {
+        const { offsetWidth, offsetHeight, outerHTML } = node;
+		console.log({ offsetWidth, offsetHeight})
+		const cssConsts = await extractCSSConsts(styleNode);
+		this.pixels = await getPixels(offsetWidth, offsetHeight, outerHTML, pre + styleNode.innerText);
+		this.genStyle = createGenerateRandomStyle({...cssConsts, classNames:['root'/*,'link','label'*/]});//,
+		this.peek(this.pixels);
+
+		this.fitnessFunc = async genes => {
+			const newPixels = await getPixels(offsetWidth, offsetHeight, semantic, pre+renderCSS(defaultPrePostPost.concat(genes)));
+			this.peek(newPixels);
+			return matchImages(newPixels, this.pixels) + genes.length /1000.0;
+		};
+		this.mutateFunc = (a, b) => {
+			let type = randomMutationType();
+			if (a.length < 2 ) {
+				type = 'ADD';
+			} else if (a.length > 12 && type === 'ADD') {
+				type = 'REMOVE';
+			}
+			const idx = randomInt(a.length);
+
+			switch (type) {
+				case 'REPLACE':
+					return a.slice(0,idx).concat([this.genStyle()], a.slice(idx + 1))
+				case 'ADD':
+					return a.slice(0,idx).concat([this.genStyle()], a.slice(idx))
+				// case 'CROSS':
+				// 	return a.concat(b).sort(() => Math.random() - 0.5).slice(0,a.length);
+				case 'REMOVE':
+					return a.slice(0,idx).concat(a.slice(idx + 1));
+				case 'SHUFFLE':
+					return _.shuffle(a.slice());
+				case 'TWEAK':
+					{
+						const alt = this.genStyle(a[idx].type, a[idx].selector).value.split(' ');
+						const val = a[idx].value.split(' ');
+						for (let i = 0;i < Math.max(val.length / 4, 1);i++) {
+							const part = randomInt(val.length);
+							val[part] = alt[part];
+						}
+						return a.slice(0,idx).concat([{...a[idx], value: val.join(' ')}], a.slice(idx + 1))
+					}
+					
+
+			}
+        }
+        this.population = initPool(() => [ this.genStyle()]);
+        return this;
+    }
+    async runEpoch(callback) {
+		const startTime = performance.now();
+        this.population = await evolvePool(this.population, this.fitnessFunc, this.mutateFunc );
+        const best = _.first(this.population.pool);
+        const worst = _.last(this.population.pool)
+        const style = pre+renderCSS(defaultPrePostPost.concat(best.genes));
+        const res = {
+            best,
+            style, 
+            scores: [best.score, worst.score], 
+            time: performance.now() - startTime
+        };
+		callback(res)
+    }
+}

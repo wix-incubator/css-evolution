@@ -55,9 +55,19 @@ export function getImgUrl(offsetWidth, offsetHeight, html, css) {
   return url;
 }
 
+function getCanvas(offsetWidth, offsetHeight) {
+  if (typeof OffscreenCanvas !== 'undefined') {
+    return new OffscreenCanvas(offsetWidth, offsetHeight);
+  } else {
+    const canvas = document.createElement('canvas');
+    canvas.style = `width:${offsetWidth}px;height:${offsetHeight};`;
+    return canvas;
+  }
+}
+
 export function getPixels(offsetWidth, offsetHeight, html, css) {
   return new Promise(resolve => {
-    const canvas = new OffscreenCanvas(offsetWidth + 40, offsetHeight + 40);
+    const canvas = getCanvas(offsetWidth + 40, offsetHeight + 40);
     const ctx = canvas.getContext('2d');
     const img = new Image();
     const url = getImgUrl(offsetWidth, offsetHeight, html, css);
@@ -67,6 +77,7 @@ export function getPixels(offsetWidth, offsetHeight, html, css) {
       const DOMURL = window.URL || window.webkitURL || window;
       const pixels = ctx.getImageData(0, 0, offsetWidth + 40, offsetHeight + 40);
       DOMURL.revokeObjectURL(url);
+      img.onload = null;
       resolve(pixels);
     };
     img.src = url;
