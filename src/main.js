@@ -1,9 +1,9 @@
 import App from './App.svelte';
-import {html, style, semantic} from './sample';
+import {samples} from './sample';
 
 const app = new App({
 	target: document.body,
-	props: {html, style, semantic}
+	props: {samples}
 });
 
 export default app;

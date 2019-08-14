@@ -1,9 +1,10 @@
-export const semantic = `<div class="root" style="height: 40px; min-height: 31px; width: 150px;"><a class="link" style="width:100%;height:100%;position:absolute;display:flex;align-items:center;justify-content:center"><span class="label" style="">Click</span></a></div>`
+const semantic = `<div class="root" style="height: 40px; min-height: 31px; width: 150px;"><a class="link" style="width:100%;height:100%;position:absolute;display:flex;align-items:center;justify-content:center"><span class="label" style="">Click</span></a></div>`;
+export const samples = [];
 
-
-
-const html_a = `<div id="comp-jxd3ea10" data-align="center" data-disabled="false" data-margin="0" data-should-use-flex="true" data-width="150" data-height="40" style="height: 40px; min-height: 31px; width: 150px;" class="style-jxd3ed23" data-state="desktop shouldUseFlex center"><div id="comp-jxd3ea10link" class="style-jxd3ed23link"><span class="style-jxd3ed23_left"></span><span class="style-jxd3ed23_right"></span><span id="comp-jxd3ea10label" class="style-jxd3ed23label">Click</span><div class="style-jxd3ed23_shineOnYouCrazyDiamond"></div></div></div>`
-const style_a = `.style-jxd3ed23 button.style-jxd3ed23link {width:100%;}
+samples.push({
+  semantic,
+  html: `<div id="comp-jxd3ea10" data-align="center" data-disabled="false" data-margin="0" data-should-use-flex="true" data-width="150" data-height="40" style="height: 40px; min-height: 31px; width: 150px;" class="style-jxd3ed23" data-state="desktop shouldUseFlex center"><div id="comp-jxd3ea10link" class="style-jxd3ed23link"><span class="style-jxd3ed23_left"></span><span class="style-jxd3ed23_right"></span><span id="comp-jxd3ea10label" class="style-jxd3ed23label">Click</span><div class="style-jxd3ed23_shineOnYouCrazyDiamond"></div></div></div>`,
+  style: `.style-jxd3ed23 button.style-jxd3ed23link {width:100%;}
 .style-jxd3ed23[data-state~="shouldUseFlex"] .style-jxd3ed23link,.style-jxd3ed23[data-state~="shouldUseFlex"] .style-jxd3ed23labelwrapper {text-align:initial;display:flex;align-items:center;}
 .style-jxd3ed23[data-state~="shouldUseFlex"][data-state~="center"] .style-jxd3ed23link,.style-jxd3ed23[data-state~="shouldUseFlex"][data-state~="center"] .style-jxd3ed23labelwrapper {justify-content:center;}
 .style-jxd3ed23[data-state~="shouldUseFlex"][data-state~="left"] .style-jxd3ed23link,.style-jxd3ed23[data-state~="shouldUseFlex"][data-state~="left"] .style-jxd3ed23labelwrapper {justify-content:flex-start;}
@@ -19,10 +20,12 @@ const style_a = `.style-jxd3ed23 button.style-jxd3ed23link {width:100%;}
 .style-jxd3ed23_shineOnYouCrazyDiamond {bottom:50%;top:0;left:0;background:url(https://static.parastorage.com/services/skins/2.1229.80/images/wysiwyg/core/themes/base/whitegradient.png) repeat-x 0 100%;overflow:hidden;border-radius:12px 12px 0 0;width:100%;content:'';position:absolute;}
 .style-jxd3ed23[data-disabled="true"] .style-jxd3ed23link,.style-jxd3ed23[data-preview~="disabled"] .style-jxd3ed23link {background-color:rgba(204, 204, 204, 1);}
 .style-jxd3ed23[data-disabled="true"] .style-jxd3ed23label,.style-jxd3ed23[data-preview~="disabled"] .style-jxd3ed23label {color:#FFFFFF;}`
+});
 
-
-const html_b = `<div id="comp-jxd3cqb1" data-align="center" data-disabled="false" data-margin="0" data-should-use-flex="true" data-width="150" data-height="40" style="height: 40px; min-height: 35px; width: 150px;" class="style-jxd3cz0m" data-state="desktop shouldUseFlex center"><div class="style-jxd3cz0m_arr style-jxd3cz0m_top"></div><div class="style-jxd3cz0m_arr style-jxd3cz0m_bottom"></div><div class="style-jxd3cz0m_bg"></div><div id="comp-jxd3cqb1link" class="style-jxd3cz0mlink"><span id="comp-jxd3cqb1label" class="style-jxd3cz0mlabel">Click</span></div></div>`
-const style_b = `.style-jxd3cz0m button.style-jxd3cz0mlink {width:100%;}
+samples.push({
+  semantic,
+  html: `<div id="comp-jxd3cqb1" data-align="center" data-disabled="false" data-margin="0" data-should-use-flex="true" data-width="150" data-height="40" style="height: 40px; min-height: 35px; width: 150px;" class="style-jxd3cz0m" data-state="desktop shouldUseFlex center"><div class="style-jxd3cz0m_arr style-jxd3cz0m_top"></div><div class="style-jxd3cz0m_arr style-jxd3cz0m_bottom"></div><div class="style-jxd3cz0m_bg"></div><div id="comp-jxd3cqb1link" class="style-jxd3cz0mlink"><span id="comp-jxd3cqb1label" class="style-jxd3cz0mlabel">Click</span></div></div>`,
+  style: `.style-jxd3cz0m button.style-jxd3cz0mlink {width:100%;}
 .style-jxd3cz0m[data-state~="shouldUseFlex"] .style-jxd3cz0mlink,.style-jxd3cz0m[data-state~="shouldUseFlex"] .style-jxd3cz0mlabelwrapper {text-align:initial;display:flex;align-items:center;}
 .style-jxd3cz0m[data-state~="shouldUseFlex"][data-state~="center"] .style-jxd3cz0mlink,.style-jxd3cz0m[data-state~="shouldUseFlex"][data-state~="center"] .style-jxd3cz0mlabelwrapper {justify-content:center;}
 .style-jxd3cz0m[data-state~="shouldUseFlex"][data-state~="left"] .style-jxd3cz0mlink,.style-jxd3cz0m[data-state~="shouldUseFlex"][data-state~="left"] .style-jxd3cz0mlabelwrapper {justify-content:flex-start;}
@@ -45,11 +48,12 @@ const style_b = `.style-jxd3cz0m button.style-jxd3cz0mlink {width:100%;}
 .style-jxd3cz0m[data-disabled="true"] .style-jxd3cz0mlabel,.style-jxd3cz0m[data-preview~="disabled"] .style-jxd3cz0mlabel {color:#FFFFFF;}
 .style-jxd3cz0m[data-disabled="true"] .style-jxd3cz0m_top,.style-jxd3cz0m[data-preview~="disabled"] .style-jxd3cz0m_top {border-bottom-color:rgba(204, 204, 204, 1);}
 .style-jxd3cz0m[data-disabled="true"] .style-jxd3cz0m_bottom,.style-jxd3cz0m[data-preview~="disabled"] .style-jxd3cz0m_bottom {border-top-color:rgba(204, 204, 204, 1);}`
+});
 
-
-
-const html_c = `<div id="comp-jxd3dz3s" data-align="center" data-disabled="false" data-margin="0" data-should-use-flex="true" data-width="150" data-height="40" style="height: 40px; min-height: 35px; width: 150px;" class="style-jxd3e37o" data-state="desktop shouldUseFlex center"><div id="comp-jxd3dz3slink" class="style-jxd3e37olink"><div class="style-jxd3e37o_glow"></div><div class="style-jxd3e37o_screw-tl style-jxd3e37o_screw"></div><div class="style-jxd3e37o_screw-tr style-jxd3e37o_screw"></div><div class="style-jxd3e37o_screw-bt style-jxd3e37o_screw"></div><div class="style-jxd3e37o_screw-br style-jxd3e37o_screw"></div><span id="comp-jxd3dz3slabel" class="style-jxd3e37olabel">Click</span></div></div>`;
-const style_c = `.style-jxd3e37o button.style-jxd3e37olink {width:100%;}
+samples.push({
+  semantic,
+  html: `<div id="comp-jxd3dz3s" data-align="center" data-disabled="false" data-margin="0" data-should-use-flex="true" data-width="150" data-height="40" style="height: 40px; min-height: 35px; width: 150px;" class="style-jxd3e37o" data-state="desktop shouldUseFlex center"><div id="comp-jxd3dz3slink" class="style-jxd3e37olink"><div class="style-jxd3e37o_glow"></div><div class="style-jxd3e37o_screw-tl style-jxd3e37o_screw"></div><div class="style-jxd3e37o_screw-tr style-jxd3e37o_screw"></div><div class="style-jxd3e37o_screw-bt style-jxd3e37o_screw"></div><div class="style-jxd3e37o_screw-br style-jxd3e37o_screw"></div><span id="comp-jxd3dz3slabel" class="style-jxd3e37olabel">Click</span></div></div>`,
+  style: `.style-jxd3e37o button.style-jxd3e37olink {width:100%;}
 .style-jxd3e37o[data-state~="shouldUseFlex"] .style-jxd3e37olink,.style-jxd3e37o[data-state~="shouldUseFlex"] .style-jxd3e37olabelwrapper {text-align:initial;display:flex;align-items:center;}
 .style-jxd3e37o[data-state~="shouldUseFlex"][data-state~="center"] .style-jxd3e37olink,.style-jxd3e37o[data-state~="shouldUseFlex"][data-state~="center"] .style-jxd3e37olabelwrapper {justify-content:center;}
 .style-jxd3e37o[data-state~="shouldUseFlex"][data-state~="left"] .style-jxd3e37olink,.style-jxd3e37o[data-state~="shouldUseFlex"][data-state~="left"] .style-jxd3e37olabelwrapper {justify-content:flex-start;}
@@ -68,9 +72,12 @@ const style_c = `.style-jxd3e37o button.style-jxd3e37olink {width:100%;}
 .style-jxd3e37o[data-disabled="false"]:active[data-state~="mobile"] .style-jxd3e37olabel,.style-jxd3e37o[data-disabled="false"]:hover[data-state~="desktop"] .style-jxd3e37olabel,.style-jxd3e37o[data-disabled="false"][data-preview~="hover"] .style-jxd3e37olabel {color:#FFFFFF;}
 .style-jxd3e37o[data-disabled="true"] .style-jxd3e37olink,.style-jxd3e37o[data-preview~="disabled"] .style-jxd3e37olink {background-color:rgba(204, 204, 204, 1);}
 .style-jxd3e37o[data-disabled="true"] .style-jxd3e37olabel,.style-jxd3e37o[data-preview~="disabled"] .style-jxd3e37olabel {color:#FFFFFF;}`
+});
 
-const html_d = `<div id="comp-jxd3elff" data-align="center" data-disabled="false" data-margin="0" data-should-use-flex="true" data-width="150" data-height="40" style="height: 40px; min-height: 35px; width: 150px;" class="style-jxd3ffh1" data-state="desktop shouldUseFlex center"><div class="style-jxd3ffh1_left"></div><div id="comp-jxd3elfflink" class="style-jxd3ffh1link"><span id="comp-jxd3elfflabel" class="style-jxd3ffh1label">Click</span></div><div class="style-jxd3ffh1_right"></div></div>`
-const style_d = `.style-jxd3ffh1 button.style-jxd3ffh1link {width:100%;}
+samples.push({
+  semantic,
+  html: `<div id="comp-jxd3elff" data-align="center" data-disabled="false" data-margin="0" data-should-use-flex="true" data-width="150" data-height="40" style="height: 40px; min-height: 35px; width: 150px;" class="style-jxd3ffh1" data-state="desktop shouldUseFlex center"><div class="style-jxd3ffh1_left"></div><div id="comp-jxd3elfflink" class="style-jxd3ffh1link"><span id="comp-jxd3elfflabel" class="style-jxd3ffh1label">Click</span></div><div class="style-jxd3ffh1_right"></div></div>`,
+  style: `.style-jxd3ffh1 button.style-jxd3ffh1link {width:100%;}
 .style-jxd3ffh1[data-state~="shouldUseFlex"] .style-jxd3ffh1link,.style-jxd3ffh1[data-state~="shouldUseFlex"] .style-jxd3ffh1labelwrapper {text-align:initial;display:flex;align-items:center;}
 .style-jxd3ffh1[data-state~="shouldUseFlex"][data-state~="center"] .style-jxd3ffh1link,.style-jxd3ffh1[data-state~="shouldUseFlex"][data-state~="center"] .style-jxd3ffh1labelwrapper {justify-content:center;}
 .style-jxd3ffh1[data-state~="shouldUseFlex"][data-state~="left"] .style-jxd3ffh1link,.style-jxd3ffh1[data-state~="shouldUseFlex"][data-state~="left"] .style-jxd3ffh1labelwrapper {justify-content:flex-start;}
@@ -86,9 +93,12 @@ const style_d = `.style-jxd3ffh1 button.style-jxd3ffh1link {width:100%;}
 .style-jxd3ffh1_right {background-position:left -2px;right:-7px;}
 .style-jxd3ffh1label {font:normal normal normal 25px/1.4em proxima-n-w01-reg,sans-serif ;  transition:color 0.4s ease 0s;  color:#9BCB6C;display:inline-block;position:relative;white-space:nowrap;}
 .style-jxd3ffh1[data-disabled="true"] .style-jxd3ffh1label,.style-jxd3ffh1[data-preview~="disabled"] .style-jxd3ffh1label {color:#FFFFFF;}`
+});
 
-const html_e = `<div id="comp-jxd3dpgi" data-align="center" data-disabled="false" data-margin="0" data-should-use-flex="true" data-width="150" data-height="45" style="height: 45px; min-height: 35px; width: 150px;" class="style-jxd3dtit" data-state="desktop shouldUseFlex center"><div class="style-jxd3dtit_brd style-jxd3dtit_top"></div><div class="style-jxd3dtit_brd style-jxd3dtit_bot"></div><div id="comp-jxd3dpgilink" class="style-jxd3dtitlink"><span id="comp-jxd3dpgilabel" class="style-jxd3dtitlabel">Click</span></div></div>`
-const style_e = `.style-jxd3dtit button.style-jxd3dtitlink {width:100%;}
+samples.push({
+  semantic,
+  html: `<div id="comp-jxd3dpgi" data-align="center" data-disabled="false" data-margin="0" data-should-use-flex="true" data-width="150" data-height="45" style="height: 45px; min-height: 35px; width: 150px;" class="style-jxd3dtit" data-state="desktop shouldUseFlex center"><div class="style-jxd3dtit_brd style-jxd3dtit_top"></div><div class="style-jxd3dtit_brd style-jxd3dtit_bot"></div><div id="comp-jxd3dpgilink" class="style-jxd3dtitlink"><span id="comp-jxd3dpgilabel" class="style-jxd3dtitlabel">Click</span></div></div>`,
+  style: `.style-jxd3dtit button.style-jxd3dtitlink {width:100%;}
 .style-jxd3dtit[data-state~="shouldUseFlex"] .style-jxd3dtitlink,.style-jxd3dtit[data-state~="shouldUseFlex"] .style-jxd3dtitlabelwrapper {text-align:initial;display:flex;align-items:center;}
 .style-jxd3dtit[data-state~="shouldUseFlex"][data-state~="center"] .style-jxd3dtitlink,.style-jxd3dtit[data-state~="shouldUseFlex"][data-state~="center"] .style-jxd3dtitlabelwrapper {justify-content:center;}
 .style-jxd3dtit[data-state~="shouldUseFlex"][data-state~="left"] .style-jxd3dtitlink,.style-jxd3dtit[data-state~="shouldUseFlex"][data-state~="left"] .style-jxd3dtitlabelwrapper {justify-content:flex-start;}
@@ -103,9 +113,12 @@ const style_e = `.style-jxd3dtit button.style-jxd3dtitlink {width:100%;}
 .style-jxd3dtitlabel {font:normal normal normal 25px/1.4em proxima-n-w01-reg,sans-serif ;  transition:color 0.4s ease 0s;  color:#FFFFFF;display:inline-block;margin:-4px 0 0 -4px;position:relative;white-space:nowrap;}
 .style-jxd3dtit[data-disabled="true"] .style-jxd3dtitlink,.style-jxd3dtit[data-preview~="disabled"] .style-jxd3dtitlink {background-color:rgba(204, 204, 204, 1);}
 .style-jxd3dtit[data-disabled="true"] .style-jxd3dtitlabel,.style-jxd3dtit[data-preview~="disabled"] .style-jxd3dtitlabel {color:#FFFFFF;}`
+});
 
-const html_f = `<div id="comp-jxd3g54w" data-align="center" data-disabled="false" data-margin="0" data-should-use-flex="true" data-width="150" data-height="40" style="height: 40px; min-height: 35px; width: 150px;" class="style-jxd3g86u" data-state="desktop shouldUseFlex center"><div class="style-jxd3g86u_shd"></div><div id="comp-jxd3g54wlink" class="style-jxd3g86ulink"><span id="comp-jxd3g54wlabel" class="style-jxd3g86ulabel">Click</span></div></div>`
-const style_f = `.style-jxd3g86u button.style-jxd3g86ulink {width:100%;}
+samples.push({
+  semantic,
+  html: `<div id="comp-jxd3g54w" data-align="center" data-disabled="false" data-margin="0" data-should-use-flex="true" data-width="150" data-height="40" style="height: 40px; min-height: 35px; width: 150px;" class="style-jxd3g86u" data-state="desktop shouldUseFlex center"><div class="style-jxd3g86u_shd"></div><div id="comp-jxd3g54wlink" class="style-jxd3g86ulink"><span id="comp-jxd3g54wlabel" class="style-jxd3g86ulabel">Click</span></div></div>`,
+  style: `.style-jxd3g86u button.style-jxd3g86ulink {width:100%;}
 .style-jxd3g86u[data-state~="shouldUseFlex"] .style-jxd3g86ulink,.style-jxd3g86u[data-state~="shouldUseFlex"] .style-jxd3g86ulabelwrapper {text-align:initial;display:flex;align-items:center;}
 .style-jxd3g86u[data-state~="shouldUseFlex"][data-state~="center"] .style-jxd3g86ulink,.style-jxd3g86u[data-state~="shouldUseFlex"][data-state~="center"] .style-jxd3g86ulabelwrapper {justify-content:center;}
 .style-jxd3g86u[data-state~="shouldUseFlex"][data-state~="left"] .style-jxd3g86ulink,.style-jxd3g86u[data-state~="shouldUseFlex"][data-state~="left"] .style-jxd3g86ulabelwrapper {justify-content:flex-start;}
@@ -118,6 +131,4 @@ const style_f = `.style-jxd3g86u button.style-jxd3g86ulink {width:100%;}
 .style-jxd3g86u[data-disabled="false"]:active[data-state~="mobile"] .style-jxd3g86ulabel,.style-jxd3g86u[data-disabled="false"]:hover[data-state~="desktop"] .style-jxd3g86ulabel,.style-jxd3g86u[data-disabled="false"][data-preview~="hover"] .style-jxd3g86ulabel {color:#FFFFFF;transition:color 0.4s ease 0s;}
 .style-jxd3g86u[data-disabled="true"] .style-jxd3g86ulink,.style-jxd3g86u[data-preview~="disabled"] .style-jxd3g86ulink {background-color:rgba(204, 204, 204, 1);border-color:rgba(204, 204, 204, 1);}
 .style-jxd3g86u[data-disabled="true"] .style-jxd3g86ulabel,.style-jxd3g86u[data-preview~="disabled"] .style-jxd3g86ulabel {color:#FFFFFF;}`
-
-export const html = html_c;
-export const style = style_c;
+});

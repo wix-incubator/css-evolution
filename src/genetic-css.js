@@ -21,10 +21,19 @@ export default class GeneticCSS {
     constructor(peek) {
         this.peek = peek || (() => {});
     }
-    async init(semantic, node, styleNode) {
-        const { offsetWidth, offsetHeight, outerHTML } = node;
-		console.log({ offsetWidth, offsetHeight})
-		const cssConsts = await extractCSSConsts(styleNode);
+    async init(semantic, outerHTML, style) {
+        const styleNode = document.createElement('style');
+        document.body.appendChild(styleNode);
+        styleNode.innerHTML = style;
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = outerHTML;
+        const node = wrapper.firstChild;
+        document.body.appendChild(node);
+        const {offsetWidth, offsetHeight} = node;
+        document.body.removeChild(node);
+        const cssConsts = await extractCSSConsts(styleNode);
+        document.body.removeChild(styleNode);
+
 		this.pixels = await getPixels(offsetWidth, offsetHeight, outerHTML, pre + styleNode.innerText);
 		this.genStyle = createGenerateRandomStyle({...cssConsts, classNames:['root'/*,'link','label'*/]});//,
 		this.peek(this.pixels);

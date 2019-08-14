@@ -2,10 +2,22 @@
 	import {onMount} from 'svelte';
 	import {renderCSS, pretty} from './css';
 	import GeneticCSS from './genetic-css';
-	export let html = '<div></div>';
-	export let style = '';
-	export let semantic = '<div></div>';
-	$: source = `<style>${style}</style>${html}`
+	export let samples = [];
+
+	let selectedSample = -1;
+
+	function updateSample(idx) {
+		if (idx >= 0) {
+			const sample = samples[idx];
+			style = sample.style;
+			html = sample.html;
+			semantic = sample.semantic;
+		}
+	}
+	$: updateSample(selectedSample)
+	let html = ``;
+	let style = ``;
+	let semantic = '<div></div>';
 	let canvas = null;
 	let render = true;
 	let running = false;
@@ -19,11 +31,8 @@
 	let currentGeneration = 0;
 	
 	async function init (){
-		const styleNode = container.children[0];
-		const origNode = container.children[1];
 		let first = true;
 		currentGeneration = 0;
-
 		const gcss = new GeneticCSS(pixels => {
 			if (first) { 
 				canvas.style = `width:${pixels.width}px;height:${pixels.height}px;`
@@ -34,7 +43,7 @@
 				ctx.putImageData(pixels, 0, 0);
 			}
 		})
-		await gcss.init(semantic, origNode, styleNode);
+		await gcss.init(semantic, html, style);
 		running = false;
 		genetic = gcss;
 	}
@@ -52,7 +61,7 @@
 		},0);
 	}
 
-	$: container && html && style && semantic && init()
+	$: semantic && html && style && init()
 	$: running && genetic && tick({})
 
 </script>
@@ -75,14 +84,20 @@
 
 <div>
 	<h1>CSS Evolution!</h1>
+	<select bind:value={selectedSample}>
+		<option value={-1}>Select</option>
+		{#each samples as sample, i}
+			<option value={i}>Sample {i + 1}</option>
+		{/each}
+	</select>
+	<textarea bind:value={html}></textarea>
+	<textarea bind:value={style}></textarea>
+	<textarea bind:value={semantic}></textarea>
 	<input type=checkbox bind:checked={running}>Running
 	<br>
 	<input type=checkbox bind:checked={render}>Render
 	<span>Best score:{score} Generation:{currentGeneration}</span>
 	<br>
-	<section bind:this={container}>
-		{@html source}
-	</section>
 	<sidebar>
 		<canvas bind:this={canvas}/>
 	</sidebar>
