@@ -1,10 +1,11 @@
 import {genPickRandom, randomInt} from './random'
 import {initPool, evolvePool} from './genetic';
 import {getPixels, matchImages, getImgUrl} from './pixels';
-import {extractCSSConsts, createGenerateRandomStyle, renderCSS, absoluteCoverPosition, pretty} from './css'
+import {extractCSSConsts, createGenerateRandomStyle, renderCSS, absoluteCoverPosition, contentEmpty} from './css'
 import _ from 'lodash';
-const defaultPrePostPost = [{selector: 'root::before', ...absoluteCoverPosition},{selector: 'root::after', ...absoluteCoverPosition}]
 
+const defaultPrePostPost = ['root::before','root::after'].map(selector => ([{selector, ...absoluteCoverPosition},{selector, ...contentEmpty}])).flat()
+console.log('defaultPrePostPost', defaultPrePostPost)
 const pre = `span[class$="label"] {color:transparent !important;}
 `
 
@@ -13,7 +14,7 @@ const randomMutationType = genPickRandom({
     REMOVE: 25,
     REPLACE: 5,
     TWEAK: 10,
-    SHUFFLE: 1,
+    SHUFFLE: 3,
     // CROSS: 1
 });
 

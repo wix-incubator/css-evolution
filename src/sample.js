@@ -1,4 +1,4 @@
-const semantic = `<div class="root" style="height: 40px; min-height: 31px; width: 150px;"><a class="link" style="width:100%;height:100%;position:absolute;display:flex;align-items:center;justify-content:center"><span class="label" style="">Click</span></a></div>`;
+const semantic = `<div class="root" style="height: 40px; min-height: 31px; width: 150px;position:absolute;"><a class="link" style="width:100%;height:100%;position:absolute;display:flex;align-items:center;justify-content:center"><span class="label" style="">Click</span></a></div>`;
 export const samples = [];
 
 samples.push({

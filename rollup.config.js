@@ -5,15 +5,7 @@ import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 
 const production = !process.env.ROLLUP_WATCH;
-
-export default {
-	input: 'src/main.js',
-	output: {
-		sourcemap: true,
-		format: 'iife',
-		name: 'app',
-		file: 'public/bundle.js'
-	},
+const baseRollupConfig = {
 	plugins: [
 		svelte({
 			// enable run-time checks when not in production
@@ -47,4 +39,23 @@ export default {
 	watch: {
 		clearScreen: false
 	}
-};
+}
+export default [{
+	input: 'src/main.js',
+	output: {
+		sourcemap: true,
+		format: 'iife',
+		name: 'app',
+		file: 'public/bundle.js'
+	},
+	...baseRollupConfig	
+}, {
+	input: 'src/genetic-css.js',
+	output: {
+		sourcemap: true,
+		format: 'umd',
+		name: 'geneticCSS',
+		file: 'public/genetic.js'
+	},
+	...baseRollupConfig	
+}];

@@ -40,6 +40,11 @@ export const absoluteCoverPosition = {
   value:`absolute; left:0; top:0; bottom:0; right:0`
 }
 
+export const contentEmpty = {
+  type: 'content',
+  value: '""'
+}
+
 export function createGenerateRandomStyle({ sizes, colors, urls, classNames }) {
   // console.log(colors,urls);
   const randomColor = pickRandomFromArray.bind(null, colors);
@@ -57,8 +62,8 @@ export function createGenerateRandomStyle({ sizes, colors, urls, classNames }) {
     'border-radius': 5,
     'box-shadow': 10,
     'border': 5,
-    // 'margin': 2,
-    // position: 5,
+    'margin': 2,
+    position: 5,
   });
   const randomSelector = genPickRandom(
     classNames.reduce(
@@ -72,10 +77,21 @@ export function createGenerateRandomStyle({ sizes, colors, urls, classNames }) {
     )
   );
 
+  const removeFromNonPseudo = {
+    'position': true,
+    'margin': true
+  }
+
   function generateRandomStyle(type, selector) {
-    type = type || randomType();
-    // console.log(type);
     selector = selector || randomSelector();
+
+    while (!type) {
+      type = randomType();
+      if (removeFromNonPseudo[type] && selector.indexOf(':') === -1) {
+        type = null;
+      }
+    }
+    // console.log(type, selector);
     switch (type) {
       case 'border-radius':
       case 'margin':
@@ -83,7 +99,7 @@ export function createGenerateRandomStyle({ sizes, colors, urls, classNames }) {
       case 'box-shadow':
           return { type, selector, value: [randomSize(), randomSize(),randomSize(), randomSize(), randomColor()].join(' ') };
       case 'border':
-          return { type, selector, value: [randomSize(), 'solid', randomColor()].join(' ') };
+          return { type, selector, value: [randomSize(), randomSize(),randomSize(), randomSize(), randomColor(), 'solid', randomColor()].join(' ') };
       case 'background-color':
         return { type, selector, value: randomColor() };
       case 'position':
@@ -139,8 +155,8 @@ export function renderCSS(styles) {
 }
 
 const CSS_PART_REGEX = /\s*([{;}])\s*/gm;
-
+ 
 export function pretty(css) {
-  return css.replace(CSS_PART_REGEX, (all, char) => (char.length > 1 ? '\n' : '') +` ${char}
+  return css.replace(CSS_PART_REGEX, (_match, char) => (char.length > 1 ? '\n' : '') +` ${char}
   `);
 }
