@@ -6,6 +6,7 @@ const surivors = 1;
 export function initPool(spawn) {
     const pool = new Array(surivors).fill().map(() => {
         const genes = spawn();
+        console.log(genes);
         return {
             genes,
             generation: 0,

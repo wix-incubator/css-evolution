@@ -1,21 +1,37 @@
 <script>
 	import {onMount} from 'svelte';
 	import {renderCSS, pretty} from './css';
-	import GeneticCSS from './genetic-css';
+	import {geneticCSS} from './genetic-css';
 	export let samples = [];
 
 	let selectedSample = -1;
-
+	let pre = "";
 	function updateSample(idx) {
 		if (idx >= 0) {
+			console.log(samples);
 			const sample = samples[idx];
 			style = sample.style;
-			html = sample.html;
+			legacy = sample.legacy;
 			semantic = sample.semantic;
+			pre = sample.pre || "";
 		}
 	}
+
+	let first = true;
+
+	const peek = pixels => {
+			if (first) { 
+				canvas.style = `width:${pixels.width}px;height:${pixels.height}px;`
+				first = false;
+			}
+			if (render) {
+				const ctx = canvas.getContext('2d');
+				ctx.putImageData(pixels, 0, 0);
+			}
+		}
+
 	$: updateSample(selectedSample)
-	let html = ``;
+	let legacy = ``;
 	let style = ``;
 	let semantic = '<div></div>';
 	let canvas = null;
@@ -31,21 +47,11 @@
 	let currentGeneration = 0;
 	
 	async function init (){
-		let first = true;
+		first = true;
 		currentGeneration = 0;
-		const gcss = new GeneticCSS(pixels => {
-			if (first) { 
-				canvas.style = `width:${pixels.width}px;height:${pixels.height}px;`
-				first = false;
-			}
-			if (render) {
-				const ctx = canvas.getContext('2d');
-				ctx.putImageData(pixels, 0, 0);
-			}
-		})
-		await gcss.init(semantic, html, style);
+		genetic = null;
 		running = false;
-		genetic = gcss;
+		genetic = await geneticCSS({semantic, legacy, style, peek, pre});
 	}
 
 	async function tick({best, scores, time, style}) {
@@ -53,15 +59,15 @@
 			output = style;
 			score = best.score;
 		}
-		setTimeout(() => {
+		setTimeout(async () => {
 			if (running) {
 				currentGeneration = currentGeneration + 1;
-				genetic.runEpoch(tick)
+				tick(await genetic())
 			}
 		},0);
 	}
 
-	$: semantic && html && style && init()
+	$: semantic && legacy && style && init()
 	$: running && genetic && tick({})
 
 </script>
@@ -90,7 +96,7 @@
 			<option value={i}>Sample {i + 1}</option>
 		{/each}
 	</select>
-	<textarea bind:value={html}></textarea>
+	<textarea bind:value={legacy}></textarea>
 	<textarea bind:value={style}></textarea>
 	<textarea bind:value={semantic}></textarea>
 	<input type=checkbox bind:checked={running}>Running

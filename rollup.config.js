@@ -2,11 +2,15 @@ import svelte from 'rollup-plugin-svelte';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
+import json from 'rollup-plugin-json';
 import { terser } from 'rollup-plugin-terser';
 
 const production = !process.env.ROLLUP_WATCH;
 const baseRollupConfig = {
 	plugins: [
+		json({
+			
+		  }),
 		svelte({
 			// enable run-time checks when not in production
 			dev: !production,
@@ -53,7 +57,7 @@ export default [{
 	input: 'src/genetic-css.js',
 	output: {
 		sourcemap: true,
-		format: 'umd',
+		format: 'iife',
 		name: 'geneticCSS',
 		file: 'public/genetic.js'
 	},
