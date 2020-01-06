@@ -25,6 +25,13 @@
     "rollup-plugin-json": "^4.0.0",
     "sirv-cli": "^0.4.4"
   },
+  "files": [
+    "public",
+    "src",
+    "index.js",
+    "server.js",
+    "runner.js"
+  ],
   "scripts": {
     "build": "rollup -c",
     "docs": "gh-pages -d public",
@@ -32,6 +39,6 @@
     "dev": "run-p start:dev autobuild",
     "start": "sirv public --single",
     "start:dev": "sirv public --single --dev",
-    "release": "wnpm-release"
+    "release": "npx -p wnpm-ci wnpm-release --no-shrinkwrap"
   }
 }
