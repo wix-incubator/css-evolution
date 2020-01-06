@@ -1,4 +1,11 @@
-const fetch = require('node-fetch');
+const AWS = require('aws-sdk');
+const lambda = new AWS.Lambda({
+  apiVersion: '2015-03-31',
+  region: 'us-east-1',
+  endpoint: 'https://lambda.us-east-1.amazonaws.com',
+  logger: console
+});
+
 const fs = require('fs');
 const util = require('util');
 
@@ -39,15 +46,25 @@ function bestResult(results) {
   return results[0].best.genes;
 }
 
-async function evolve(server, filename, threads = 2, timeout = 10000) {
+function invokeLambda(server, payload) {
+  return new Promise((resolve,reject) => {
+    lambda.invoke({
+      FunctionName: server,
+      Payload: JSON.stringify(payload)
+    }, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(JSON.parse(data.Payload))
+        }
+      })
+    })
+}
+
+async function evolve(server, filename, threads = 20, timeout = 10000) {
   const data = JSON.parse(await readFileMaybe(filename));
   const initial = bestResult(await readFileMaybe(`${filename}.results`));
-  const requests = new Array(threads).fill(0).map(() => fetch(server, {
-      method: 'post',
-      body: JSON.stringify({ ...data, timeout, initial }),
-      headers: { 'Content-Type': 'application/json' }
-    }).then(response => response.json())
-  );
+  const requests = new Array(threads).fill(0).map(() => invokeLambda(server, { ...data, timeout, initial }))
   const res = await Promise.all(requests);
   appendFile(`${filename}.results`, res.map(val => JSON.stringify(val) + '\n').join(''));
 }

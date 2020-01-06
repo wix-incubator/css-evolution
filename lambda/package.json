@@ -1,0 +1,14 @@
+{
+  "name": "css-evolution-lambda",
+  "version": "1.0.0",
+  "devDependencies": {
+    "puppeteer": "^2.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "chrome-aws-lambda": "^2.0.2",
+    "puppeteer-core": "^2.0.0"
+  }
+}

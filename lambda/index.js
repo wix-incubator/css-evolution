@@ -1,25 +1,21 @@
 const chromium = require("chrome-aws-lambda");
 const path = require('path');
-const geneticFilename = path.resolve(__dirname, "./public/genetic.js")
+const geneticFilename = path.resolve(__dirname, "./genetic.js")
 const genetic = require("fs").readFileSync(geneticFilename);
 
-let browserReady = null;
-function getBrowser() {
-  browserReady =
-    browserReady ||
-    new Promise(async resolve => {
-      const browser = await chromium.puppeteer.launch({
+async function getBrowser() {
+    const browser = await chromium.puppeteer.launch({
         executablePath: await chromium.executablePath,
         args: chromium.args,
         defaultViewport: chromium.defaultViewport,
         headless: chromium.headless
       });
-      resolve(browser);
-    });
-  return browserReady;
+    return browser
 }
-module.exports = async function evolve({ timeout, semantic, legacy, style, pre, initial }) {
-  const browser = await getBrowser();
+const browserReady = getBrowser()
+
+exports.handler = async function evolve({ timeout, semantic, legacy, style, pre, initial }) {
+  const browser = await browserReady;
   const page = await browser.newPage();
   page.evaluate(`(() => {
         ${genetic};

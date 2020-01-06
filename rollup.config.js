@@ -59,7 +59,7 @@ export default [{
 		sourcemap: true,
 		format: 'iife',
 		name: 'geneticCSS',
-		file: 'public/genetic.js'
+		file: 'lambda/genetic.js'
 	},
 	...baseRollupConfig	
 }];
