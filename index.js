@@ -1,5 +1,7 @@
 const chromium = require("chrome-aws-lambda");
-const genetic = require("fs").readFileSync("./public/genetic.js");
+const path = require('path');
+const geneticFilename = path.resolve(__dirname, "./public/genetic.js")
+const genetic = require("fs").readFileSync(geneticFilename);
 
 let browserReady = null;
 function getBrowser() {
