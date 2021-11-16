@@ -17,7 +17,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "aws-sdk": "^2.597.0",
+    "aws-sdk": "^2.814.0",
     "lodash": "^4.17.15",
     "sirv-cli": "^0.4.4"
   },
